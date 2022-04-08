@@ -5,6 +5,7 @@
  */
 package instructoria.boundary;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 
@@ -14,8 +15,8 @@ import javax.swing.DefaultListModel;
  */
 public class Listas extends javax.swing.JFrame {
 
-    DefaultListModel mdlListaPrincipal = new DefaultListModel();
-    ArrayList<String> elementosPrincipales = new ArrayList();
+    private DefaultListModel mdlListaPrincipal = new DefaultListModel();
+    private ArrayList<String> elementosPrincipales = new ArrayList();
 
     /**
      * Creates new form Listas
@@ -39,7 +40,7 @@ public class Listas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNuevoElemento = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstListaPrincipal = new javax.swing.JList<>();
         btnEliminar = new javax.swing.JButton();
@@ -80,16 +81,17 @@ public class Listas extends javax.swing.JFrame {
         txtNuevoElemento.setBackground(new java.awt.Color(254, 254, 254));
         txtNuevoElemento.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
 
-        jButton1.setBackground(new java.awt.Color(254, 254, 254));
-        jButton1.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregar.setBackground(new java.awt.Color(254, 254, 254));
+        btnAgregar.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAgregarActionPerformed(evt);
             }
         });
 
         lstListaPrincipal.setModel(mdlListaPrincipal);
+        lstListaPrincipal.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(lstListaPrincipal);
 
         btnEliminar.setBackground(new java.awt.Color(254, 254, 254));
@@ -103,7 +105,7 @@ public class Listas extends javax.swing.JFrame {
 
         lblMensajes.setBackground(new java.awt.Color(254, 254, 254));
         lblMensajes.setFont(new java.awt.Font("Roboto", 0, 13)); // NOI18N
-        lblMensajes.setForeground(new java.awt.Color(224, 223, 28));
+        lblMensajes.setForeground(new java.awt.Color(1, 1, 1));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,7 +116,7 @@ public class Listas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtNuevoElemento)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -132,7 +134,7 @@ public class Listas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNuevoElemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnAgregar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,19 +158,27 @@ public class Listas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (!txtNuevoElemento.equals("")) {
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        if (!txtNuevoElemento.getText().isEmpty()) {
             this.elementosPrincipales.add(txtNuevoElemento.getText());
-            this.mdlListaPrincipal.clear();
-            this.mdlListaPrincipal.addAll(elementosPrincipales);
+            actualizarLista();
+        }else{
+            lblMensajes.setText("No puede ingresar un elemento vacio");
+            lblMensajes.setForeground(Color.red);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         //int index = lstListaPrincipal.getSelectedIndex();
-        
-        if( lstListaPrincipal.isSelectionEmpty() ){
-            
+
+        if (lstListaPrincipal.isSelectionEmpty()) {
+            lblMensajes.setText("Seleccion vacia");
+            lblMensajes.setForeground(Color.red);
+        } else {
+            lblMensajes.setText("Elemento eliminado");
+            lblMensajes.setForeground(Color.orange);
+            this.elementosPrincipales.remove(lstListaPrincipal.getSelectedIndex());
+            actualizarLista();
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -207,9 +217,15 @@ public class Listas extends javax.swing.JFrame {
         });
     }
 
+    private void actualizarLista() {
+        this.mdlListaPrincipal.clear();
+        this.mdlListaPrincipal.addAll(elementosPrincipales);
+        txtNuevoElemento.setText("");
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
