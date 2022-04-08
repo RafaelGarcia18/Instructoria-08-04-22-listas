@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package instructoria.pkg08.pkg04.pkg22.listas;
+package instructoria;
+
+import instructoria.boundary.Listas;
 
 /**
  *
@@ -15,7 +17,8 @@ public class Instructoria080422Listas {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Listas screen = new Listas();
+        screen.setVisible(true);
     }
     
 }
